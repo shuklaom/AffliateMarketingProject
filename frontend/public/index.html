@@ -2,12 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <script>
+      // Generate ED Logo icon dynamically
+      (function() {
+        const svg = `<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="edGradient3D" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#26d0ce;stop-opacity:1"/>
+              <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1"/>
+            </linearGradient>
+            <filter id="shadowFilter">
+              <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.2"/>
+            </filter>
+          </defs>
+          <rect x="10" y="12" width="80" height="80" rx="20" ry="20" fill="#000000" opacity="0.08"/>
+          <rect x="10" y="10" width="80" height="80" rx="20" ry="20" fill="url(#edGradient3D)" filter="url(#shadowFilter)"/>
+          <rect x="10" y="10" width="80" height="40" rx="20" ry="20" fill="#ffffff" opacity="0.15"/>
+          <text x="32" y="63" font-size="44" font-weight="700" fill="#ffffff" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif">E</text>
+          <text x="68" y="63" font-size="44" font-weight="700" fill="#ffffff" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif">D</text>
+          <line x1="15" y1="50" x2="85" y2="50" stroke="#ffffff" stroke-width="1.5" opacity="0.3"/>
+        </svg>`;
+        const dataUrl = 'data:image/svg+xml;base64,' + btoa(svg);
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.type = 'image/svg+xml';
+        link.href = dataUrl;
+        document.head.appendChild(link);
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#10b981" />
     <meta
       name="description"
-      content="AffiliateHub - Affiliate Marketing Platform"
+      content="Everyday Deals - Smart shopping, smart savings. Discover curated deals from your favorite stores."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
@@ -21,7 +48,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Everyday Deals - Smart Shopping, Smart Savings</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

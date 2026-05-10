@@ -1,15 +1,12 @@
 import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import EDLogo from '../icons/EDLogo';
 
-export const Header = ({ logoText = 'DealFinder', navItems = [] }) => {
+const Header = ({ logoText = 'Everyday Deals', navItems = [] }) => {
   const { isLoggedIn, logout } = useAuth();
 
-  const handleBrowse = () => {
-    window.location.href = '/browse-deals';
-  };
-
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <a
           href="/"
@@ -17,9 +14,12 @@ export const Header = ({ logoText = 'DealFinder', navItems = [] }) => {
             e.preventDefault();
             window.location.href = '/';
           }}
-          className="text-2xl font-bold text-primary hover:text-indigo-700 transition"
+          className="flex items-center gap-2 hover:opacity-80 transition"
         >
-          {logoText}
+          <EDLogo size={32} animated={false} />
+          <span className="text-2xl font-bold text-primary hover:text-emerald-700 transition">
+            {logoText}
+          </span>
         </a>
         <div className="flex items-center gap-8">
           <ul className="hidden md:flex gap-8">
@@ -34,14 +34,8 @@ export const Header = ({ logoText = 'DealFinder', navItems = [] }) => {
               </li>
             ))}
           </ul>
-          <button
-            onClick={handleBrowse}
-            className="hidden md:block text-gray-700 hover:text-primary transition duration-200 font-medium"
-          >
-            Browse Deals
-          </button>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 items-center">
           {isLoggedIn ? (
             <>
               <a
@@ -61,7 +55,7 @@ export const Header = ({ logoText = 'DealFinder', navItems = [] }) => {
             <>
               <a
                 href="/login"
-                className="text-gray-700 hover:text-primary transition duration-200 font-medium"
+                className="text-gray-700 hover:text-primary transition duration-200 font-medium inline-block"
               >
                 Login
               </a>

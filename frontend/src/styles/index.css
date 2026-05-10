@@ -1,5 +1,10 @@
 /* Global Styles - Tailwind loaded via CDN in index.html */
 
+:root {
+  --color-primary: #10b981;
+  --color-secondary: #f472b6;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -45,4 +50,54 @@ code {
 
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Define custom color utilities for Tailwind */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.hover\:bg-primary:hover {
+  background-color: var(--color-primary);
+}
+
+.hover\:text-primary:hover {
+  color: var(--color-primary);
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.hover\:bg-secondary:hover {
+  background-color: var(--color-secondary);
+}
+
+.hover\:text-secondary:hover {
+  color: var(--color-secondary);
+}
+
+/* Soft pastel accents */
+.bg-emerald-50 {
+  background-color: #f0fdf4;
+}
+
+.bg-rose-50 {
+  background-color: #fff7ed;
+}
+
+.text-emerald-600 {
+  color: #059669;
 }
