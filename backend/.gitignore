@@ -1,0 +1,14 @@
+# Maven build output
+target/
+
+# Environment / secrets – never commit
+.env
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
