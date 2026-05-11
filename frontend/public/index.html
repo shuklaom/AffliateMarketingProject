@@ -2,66 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <script>
-      // Generate ED Logo icon dynamically
-      (function() {
-        const svg = `<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="edGradient3D" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#26d0ce;stop-opacity:1"/>
-              <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1"/>
-            </linearGradient>
-            <filter id="shadowFilter">
-              <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.2"/>
-            </filter>
-          </defs>
-          <rect x="10" y="12" width="80" height="80" rx="20" ry="20" fill="#000000" opacity="0.08"/>
-          <rect x="10" y="10" width="80" height="80" rx="20" ry="20" fill="url(#edGradient3D)" filter="url(#shadowFilter)"/>
-          <rect x="10" y="10" width="80" height="40" rx="20" ry="20" fill="#ffffff" opacity="0.15"/>
-          <text x="32" y="63" font-size="44" font-weight="700" fill="#ffffff" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif">E</text>
-          <text x="68" y="63" font-size="44" font-weight="700" fill="#ffffff" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif">D</text>
-          <line x1="15" y1="50" x2="85" y2="50" stroke="#ffffff" stroke-width="1.5" opacity="0.3"/>
-        </svg>`;
-        const dataUrl = 'data:image/svg+xml;base64,' + btoa(svg);
-        const link = document.createElement('link');
-        link.rel = 'icon';
-        link.type = 'image/svg+xml';
-        link.href = dataUrl;
-        document.head.appendChild(link);
-      })();
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#10b981" />
+    <meta name="theme-color" content="#7c3aed" />
     <meta
       name="description"
-      content="Everyday Deals - Smart shopping, smart savings. Discover curated deals from your favorite stores."
+      content="Everyday Deals — Discover curated deals and save more every day."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Everyday Deals - Smart Shopping, Smart Savings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Everyday Deals</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

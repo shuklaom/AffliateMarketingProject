@@ -1,5 +1,7 @@
-// Product categories used for filtering in ProductShowcase
+export const APP_NAME = 'Everyday Deals';
+
 export const PRODUCT_CATEGORIES = [
+  'All',
   'Tech',
   'Home',
   'Fashion',
@@ -8,4 +10,11 @@ export const PRODUCT_CATEGORIES = [
   'Books',
   'Electronics',
   'Other',
+];
+
+export const SORT_OPTIONS = [
+  { label: 'Latest',       value: 'latest' },
+  { label: 'Price: Low→High', value: 'price_asc' },
+  { label: 'Price: High→Low', value: 'price_desc' },
+  { label: 'Best Discount', value: 'discount' },
 ];

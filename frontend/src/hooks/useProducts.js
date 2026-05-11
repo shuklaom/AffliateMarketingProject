@@ -1,73 +1,81 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchProducts, fetchProductsByCategory, searchProducts } from '../services/productService';
+import {
+  fetchProducts,
+  fetchProductsByCategory,
+  searchProducts,
+} from '../services/productService';
 
-export const useProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+/**
+ * Centralised product-fetching hook.
+ *
+ * Usage:
+ *   const { products, loading, error, totalPages, setCategory, setQuery, setPage } = useProducts();
+ */
+export function useProducts({ initialCategory = 'All', initialQuery = '' } = {}) {
+  const [products, setProducts]     = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState(null);
+  const [page, setPage]             = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [category, setCategory]     = useState(initialCategory);
+  const [query, setQuery]           = useState(initialQuery);
 
-  const loadProducts = useCallback(async () => {
+  const normalise = (data) => {
+    if (Array.isArray(data)) return { products: data, totalPages: 1 };
+    return {
+      products:   Array.isArray(data.products) ? data.products : [],
+      totalPages: data.totalPages ?? 1,
+    };
+  };
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      const data = await fetchProducts();
-      setProducts(Array.isArray(data) ? data : data.products || []);
-      setError(null);
+      let data;
+      if (query.trim()) {
+        data = await searchProducts(query, { page });
+      } else if (category && category !== 'All') {
+        data = await fetchProductsByCategory(category, { page });
+      } else {
+        data = await fetchProducts({ page });
+      }
+      const { products: items, totalPages: tp } = normalise(data);
+      setProducts(items);
+      setTotalPages(tp);
     } catch (err) {
-      console.error('Error loading products:', err);
-      setError(err.message);
+      setError(err.message || 'Failed to load products.');
       setProducts([]);
     } finally {
       setLoading(false);
     }
+  }, [query, category, page]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const handleSetCategory = useCallback((cat) => {
+    setCategory(cat);
+    setQuery('');
+    setPage(1);
   }, []);
 
-  useEffect(() => {
-    loadProducts();
-  }, [loadProducts]);
-
-  const searchByCategory = useCallback(async (category) => {
-    try {
-      setLoading(true);
-      const data = await fetchProductsByCategory(category);
-      setProducts(Array.isArray(data) ? data : data.products || []);
-      setError(null);
-    } catch (err) {
-      console.error(`Error loading category ${category}:`, err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const handleSetQuery = useCallback((q) => {
+    setQuery(q);
+    setCategory('All');
+    setPage(1);
   }, []);
-
-  const searchByQuery = useCallback(async (query) => {
-    if (!query.trim()) {
-      loadProducts();
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const data = await searchProducts(query);
-      setProducts(Array.isArray(data) ? data : data.products || []);
-      setError(null);
-    } catch (err) {
-      console.error(`Error searching for "${query}":`, err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [loadProducts]);
-
-  const refetch = useCallback(() => {
-    loadProducts();
-  }, [loadProducts]);
 
   return {
     products,
     loading,
     error,
-    searchByCategory,
-    searchByQuery,
-    refetch,
+    page,
+    totalPages,
+    setPage,
+    category,
+    setCategory: handleSetCategory,
+    query,
+    setQuery: handleSetQuery,
+    refetch: load,
   };
-};
+}
