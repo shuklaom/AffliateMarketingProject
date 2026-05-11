@@ -22,15 +22,17 @@ public class ProductController {
     private final ProductService productService;
 
     /**
-     * GET /api/products?page=1&limit=24
-     * Returns a paginated list of all active products, newest first.
+     * GET /api/products?page=1&limit=24&sort=latest
+     * Returns a paginated list of all active products.
+     * sort values: latest (default), price_asc, price_desc, discount
      */
     @GetMapping
     public ResponseEntity<PagedResponse<ProductDto>> getAll(
-            @RequestParam(defaultValue = "1")  @Min(1)          int page,
-            @RequestParam(defaultValue = "24") @Min(1) @Max(100) int limit
+            @RequestParam(defaultValue = "1")      @Min(1)           int page,
+            @RequestParam(defaultValue = "24")     @Min(1) @Max(100) int limit,
+            @RequestParam(defaultValue = "latest")                   String sort
     ) {
-        return ResponseEntity.ok(productService.getAll(page, limit));
+        return ResponseEntity.ok(productService.getAll(page, limit, sort));
     }
 
     /**
@@ -43,29 +45,31 @@ public class ProductController {
     }
 
     /**
-     * GET /api/products/category/{category}?page=1&limit=24
+     * GET /api/products/category/{category}?page=1&limit=24&sort=latest
      * Returns products filtered by category.
      */
     @GetMapping("/category/{category}")
     public ResponseEntity<PagedResponse<ProductDto>> getByCategory(
-            @PathVariable                                        String category,
-            @RequestParam(defaultValue = "1")  @Min(1)          int page,
-            @RequestParam(defaultValue = "24") @Min(1) @Max(100) int limit
+            @PathVariable                                            String category,
+            @RequestParam(defaultValue = "1")      @Min(1)          int page,
+            @RequestParam(defaultValue = "24") @Min(1) @Max(100)    int limit,
+            @RequestParam(defaultValue = "latest")                   String sort
     ) {
-        return ResponseEntity.ok(productService.getByCategory(category, page, limit));
+        return ResponseEntity.ok(productService.getByCategory(category, page, limit, sort));
     }
 
     /**
-     * GET /api/products/search?q=keyword&page=1&limit=24
+     * GET /api/products/search?q=keyword&page=1&limit=24&sort=latest
      * Full-text search across title, description, and retailer.
      */
     @GetMapping("/search")
     public ResponseEntity<PagedResponse<ProductDto>> search(
-            @RequestParam                                        String q,
-            @RequestParam(defaultValue = "1")  @Min(1)          int page,
-            @RequestParam(defaultValue = "24") @Min(1) @Max(100) int limit
+            @RequestParam                                            String q,
+            @RequestParam(defaultValue = "1")      @Min(1)          int page,
+            @RequestParam(defaultValue = "24") @Min(1) @Max(100)    int limit,
+            @RequestParam(defaultValue = "latest")                   String sort
     ) {
-        return ResponseEntity.ok(productService.search(q, page, limit));
+        return ResponseEntity.ok(productService.search(q, page, limit, sort));
     }
 
     // ── Admin / management endpoints ─────────────────────────────────────

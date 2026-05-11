@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
@@ -60,4 +61,8 @@ public class Product {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    /** Computed discount ratio — used only for ORDER BY, never sent to clients. */
+    @Formula("CASE WHEN original_price > 0 THEN (original_price - price) / original_price ELSE 0 END")
+    private Double discountPct;
 }

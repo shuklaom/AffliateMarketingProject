@@ -2,14 +2,12 @@ export const APP_NAME = 'Everyday Deals';
 
 export const PRODUCT_CATEGORIES = [
   'All',
-  'Tech',
-  'Home',
-  'Fashion',
-  'Sports',
-  'Beauty',
-  'Books',
   'Electronics',
-  'Other',
+  'Kitchen',
+  'Fashion',
+  'Books',
+  'Toys',
+  'Sports',
 ];
 
 export const SORT_OPTIONS = [

@@ -11,7 +11,7 @@ import {
  * Usage:
  *   const { products, loading, error, totalPages, setCategory, setQuery, setPage } = useProducts();
  */
-export function useProducts({ initialCategory = 'All', initialQuery = '' } = {}) {
+export function useProducts({ initialCategory = 'All', initialQuery = '', initialSort = 'latest' } = {}) {
   const [products, setProducts]     = useState([]);
   const [loading, setLoading]       = useState(true);
   const [error, setError]           = useState(null);
@@ -19,6 +19,7 @@ export function useProducts({ initialCategory = 'All', initialQuery = '' } = {})
   const [totalPages, setTotalPages] = useState(1);
   const [category, setCategory]     = useState(initialCategory);
   const [query, setQuery]           = useState(initialQuery);
+  const [sort, setSort]             = useState(initialSort);
 
   const normalise = (data) => {
     if (Array.isArray(data)) return { products: data, totalPages: 1 };
@@ -34,11 +35,11 @@ export function useProducts({ initialCategory = 'All', initialQuery = '' } = {})
     try {
       let data;
       if (query.trim()) {
-        data = await searchProducts(query, { page });
+        data = await searchProducts(query, { page, sort });
       } else if (category && category !== 'All') {
-        data = await fetchProductsByCategory(category, { page });
+        data = await fetchProductsByCategory(category, { page, sort });
       } else {
-        data = await fetchProducts({ page });
+        data = await fetchProducts({ page, sort });
       }
       const { products: items, totalPages: tp } = normalise(data);
       setProducts(items);
@@ -49,7 +50,7 @@ export function useProducts({ initialCategory = 'All', initialQuery = '' } = {})
     } finally {
       setLoading(false);
     }
-  }, [query, category, page]);
+  }, [query, category, page, sort]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -65,6 +66,11 @@ export function useProducts({ initialCategory = 'All', initialQuery = '' } = {})
     setPage(1);
   }, []);
 
+  const handleSetSort = useCallback((s) => {
+    setSort(s);
+    setPage(1);
+  }, []);
+
   return {
     products,
     loading,
@@ -76,6 +82,8 @@ export function useProducts({ initialCategory = 'All', initialQuery = '' } = {})
     setCategory: handleSetCategory,
     query,
     setQuery: handleSetQuery,
+    sort,
+    setSort: handleSetSort,
     refetch: load,
   };
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +23,9 @@ public class ProductService {
 
     // ── Read operations ─────────────────────────────────────────────────
 
-    public PagedResponse<ProductDto> getAll(int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
-        return toResponse(repo.findByActiveTrueOrderByCreatedAtDesc(pageable), page);
+    public PagedResponse<ProductDto> getAll(int page, int limit, String sort) {
+        Pageable pageable = PageRequest.of(page - 1, limit, buildSort(sort));
+        return toResponse(repo.findByActiveTrue(pageable), page);
     }
 
     public ProductDto getById(Long id) {
@@ -34,16 +35,16 @@ public class ProductService {
         return new ProductDto(product);
     }
 
-    public PagedResponse<ProductDto> getByCategory(String category, int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
+    public PagedResponse<ProductDto> getByCategory(String category, int page, int limit, String sort) {
+        Pageable pageable = PageRequest.of(page - 1, limit, buildSort(sort));
         return toResponse(
-                repo.findByActiveTrueAndCategoryIgnoreCaseOrderByCreatedAtDesc(category, pageable),
+                repo.findByActiveTrueAndCategoryIgnoreCase(category, pageable),
                 page
         );
     }
 
-    public PagedResponse<ProductDto> search(String query, int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
+    public PagedResponse<ProductDto> search(String query, int page, int limit, String sort) {
+        Pageable pageable = PageRequest.of(page - 1, limit, buildSort(sort));
         return toResponse(repo.searchActive(query.trim(), pageable), page);
     }
 
@@ -74,6 +75,20 @@ public class ProductService {
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────
+
+    /**
+     * Maps the frontend sort value to a Spring Data Sort.
+     * Unknown values default to newest-first. This whitelist also prevents
+     * arbitrary field names from reaching the query layer.
+     */
+    private Sort buildSort(String sort) {
+        return switch (sort == null ? "latest" : sort) {
+            case "price_asc"  -> Sort.by(Sort.Direction.ASC,  "price");
+            case "price_desc" -> Sort.by(Sort.Direction.DESC, "price");
+            case "discount"   -> Sort.by(Sort.Direction.DESC, "discountPct");
+            default           -> Sort.by(Sort.Direction.DESC, "createdAt");
+        };
+    }
 
     private void applyRequest(Product product, ProductRequest req) {
         product.setTitle(req.getTitle());

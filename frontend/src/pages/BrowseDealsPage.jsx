@@ -11,36 +11,22 @@ import styles from './BrowseDealsPage.module.css';
 
 export default function BrowseDealsPage() {
   const [rawQuery, setRawQuery] = useState('');
-  const [sort, setSort] = useState('latest');
   const debouncedQuery = useDebounce(rawQuery, 400);
 
   const {
     products, loading, error,
     page, totalPages, setPage,
     category, setCategory,
+    sort, setSort,
     setQuery,
   } = useProducts({ initialCategory: 'All' });
 
   // Sync debounced query into hook
   useEffect(() => { setQuery(debouncedQuery); }, [debouncedQuery, setQuery]);
 
-  // Client-side sort (backend sort could be wired later)
-  const sorted = [...products].sort((a, b) => {
-    if (sort === 'price_asc')  return (a.price ?? 0) - (b.price ?? 0);
-    if (sort === 'price_desc') return (b.price ?? 0) - (a.price ?? 0);
-    if (sort === 'discount') {
-      const discA = a.originalPrice ? (a.originalPrice - a.price) / a.originalPrice : 0;
-      const discB = b.originalPrice ? (b.originalPrice - b.price) / b.originalPrice : 0;
-      return discB - discA;
-    }
-    return 0; // latest: keep server order
-  });
-
   const handleCategoryChange = (cat) => {
-    setCategory(cat);
-    setPage(1);
     setRawQuery('');
-    setQuery('');
+    setCategory(cat); // resets query state and page internally
   };
 
   return (
@@ -98,16 +84,16 @@ export default function BrowseDealsPage() {
           </p>
         )}
 
-        {!loading && !error && sorted.length === 0 && (
+        {!loading && !error && products.length === 0 && (
           <p className={styles.empty}>
             No deals found{rawQuery ? ` for "${rawQuery}"` : ''}.
           </p>
         )}
 
-        {!loading && !error && sorted.length > 0 && (
+        {!loading && !error && products.length > 0 && (
           <>
             <div className={styles.grid}>
-              {sorted.map((product) => (
+              {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
