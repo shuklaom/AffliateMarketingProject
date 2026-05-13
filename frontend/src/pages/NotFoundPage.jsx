@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useSeo } from '../hooks/useSeo';
 import styles from './NotFoundPage.module.css';
 
 export default function NotFoundPage() {
+  useSeo('Page Not Found');
   return (
     <div className={styles.page}>
       <p className={styles.code}>404</p>

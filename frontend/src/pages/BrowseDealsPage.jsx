@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { useDebounce } from '../hooks/useDebounce';
+import { useSeo } from '../hooks/useSeo';
 import ProductCard from '../components/ui/ProductCard';
 import SearchBar from '../components/ui/SearchBar';
 import CategoryFilter from '../components/ui/CategoryFilter';
@@ -10,7 +12,12 @@ import { PRODUCT_CATEGORIES, SORT_OPTIONS } from '../config/constants';
 import styles from './BrowseDealsPage.module.css';
 
 export default function BrowseDealsPage() {
-  const [rawQuery, setRawQuery] = useState('');
+  useSeo('Browse Deals', 'Browse and filter hundreds of curated affiliate deals by category, price, and discount.');
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Initialise from URL on first render
+  const [rawQuery, setRawQuery] = useState(searchParams.get('q') ?? '');
   const debouncedQuery = useDebounce(rawQuery, 400);
 
   const {
@@ -19,10 +26,24 @@ export default function BrowseDealsPage() {
     category, setCategory,
     sort, setSort,
     setQuery,
-  } = useProducts({ initialCategory: 'All' });
+  } = useProducts({
+    initialCategory: searchParams.get('category') ?? 'All',
+    initialQuery:    searchParams.get('q')        ?? '',
+    initialSort:     searchParams.get('sort')     ?? 'latest',
+  });
 
   // Sync debounced query into hook
   useEffect(() => { setQuery(debouncedQuery); }, [debouncedQuery, setQuery]);
+
+  // Keep URL in sync whenever filters change
+  useEffect(() => {
+    const params = {};
+    if (debouncedQuery) params.q        = debouncedQuery;
+    if (category !== 'All') params.category = category;
+    if (sort !== 'latest')  params.sort     = sort;
+    if (page > 1)           params.page     = page;
+    setSearchParams(params, { replace: true });
+  }, [debouncedQuery, category, sort, page, setSearchParams]);
 
   const handleCategoryChange = (cat) => {
     setRawQuery('');

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchProductById } from '../services/productService';
+import { fetchProductById, recordProductClick } from '../services/productService';
+import { useSeo } from '../hooks/useSeo';
 import Badge from '../components/ui/Badge';
 import Spinner from '../components/ui/Spinner';
 import styles from './ProductDetailPage.module.css';
@@ -11,6 +12,11 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useSeo(
+    product?.title ?? 'Product',
+    product?.description ?? undefined,
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -30,6 +36,7 @@ export default function ProductDetailPage() {
 
   const handleGetDeal = () => {
     if (product?.affiliateUrl) {
+      recordProductClick(product.id);
       window.open(product.affiliateUrl, '_blank', 'noopener,noreferrer');
     }
   };

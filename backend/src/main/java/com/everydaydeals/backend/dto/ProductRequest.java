@@ -29,6 +29,7 @@ public class ProductRequest {
 
     private String imageUrl;
     private String affiliateUrl;
-    private String retailer;
-    private String category;
+    private String  retailer;
+    private String  category;
+    private boolean featured = false;
 }

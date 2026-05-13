@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
@@ -33,6 +35,17 @@ public class ProductController {
             @RequestParam(defaultValue = "latest")                   String sort
     ) {
         return ResponseEntity.ok(productService.getAll(page, limit, sort));
+    }
+
+    /**
+     * GET /api/products/featured?limit=8
+     * Returns active featured products.
+     */
+    @GetMapping("/featured")
+    public ResponseEntity<List<ProductDto>> getFeatured(
+            @RequestParam(defaultValue = "8") @Min(1) @Max(50) int limit
+    ) {
+        return ResponseEntity.ok(productService.getFeatured(limit));
     }
 
     /**
@@ -103,6 +116,16 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * POST /api/products/{id}/click  (public)
+     * Increments the click counter for affiliate tracking.
+     */
+    @PostMapping("/{id}/click")
+    public ResponseEntity<Void> recordClick(@PathVariable Long id) {
+        productService.recordClick(id);
         return ResponseEntity.noContent().build();
     }
 }

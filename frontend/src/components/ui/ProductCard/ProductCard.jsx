@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Badge from '../Badge';
+import { recordProductClick } from '../../../services/productService';
 import styles from './ProductCard.module.css';
 
 /**
@@ -29,6 +30,7 @@ export default function ProductCard({ product }) {
 
   const handleGetDeal = (e) => {
     e.preventDefault();
+    recordProductClick(id);
     if (affiliateUrl) window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
   };
 

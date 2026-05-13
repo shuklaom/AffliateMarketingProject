@@ -54,6 +54,12 @@ public class Product {
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
+    @Column(name = "is_featured", nullable = false)
+    private boolean featured = false;
+
+    @Column(name = "click_count", nullable = false)
+    private int clickCount = 0;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

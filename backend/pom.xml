@@ -17,7 +17,7 @@
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>everyday-deals-backend</name>
-    <description>Everyday Deals – affiliate product aggregation backend</description>
+    <description>Everyday Deals - affiliate product aggregation backend</description>
 
     <properties>
         <java.version>21</java.version>

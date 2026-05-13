@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -48,6 +50,12 @@ public class ProductService {
         return toResponse(repo.searchActive(query.trim(), pageable), page);
     }
 
+    public List<ProductDto> getFeatured(int limit) {
+        Pageable pageable = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return repo.findByActiveTrueAndFeaturedTrue(pageable)
+                   .stream().map(ProductDto::new).toList();
+    }
+
     // ── Write operations ─────────────────────────────────────────────────
 
     @Transactional
@@ -72,6 +80,14 @@ public class ProductService {
         // Soft-delete: keeps the row but hides it from all queries
         product.setActive(false);
         repo.save(product);
+    }
+
+    @Transactional
+    public void recordClick(Long id) {
+        if (!repo.existsById(id)) {
+            throw new EntityNotFoundException("Product not found: " + id);
+        }
+        repo.incrementClickCount(id);
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────
@@ -99,6 +115,7 @@ public class ProductService {
         product.setAffiliateUrl(req.getAffiliateUrl());
         product.setRetailer(req.getRetailer());
         product.setCategory(req.getCategory());
+        product.setFeatured(req.isFeatured());
     }
 
     private PagedResponse<ProductDto> toResponse(Page<Product> page, int requestedPage) {

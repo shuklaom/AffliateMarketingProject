@@ -370,3 +370,21 @@ VALUES
      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400',
      'https://example.com/aff/theragun-prime',
      'Therabody', 'Sports', true, NOW(), NOW());
+
+-- ── New columns (safe to run on existing databases) ───────────────────────
+-- Hibernate also adds these on startup via ddl-auto=update.
+ALTER TABLE products
+    ADD COLUMN IF NOT EXISTS is_featured TINYINT(1) NOT NULL DEFAULT 0,
+    ADD COLUMN IF NOT EXISTS click_count INT         NOT NULL DEFAULT 0;
+
+-- Mark 8 products as featured
+UPDATE products SET is_featured = 1 WHERE title IN (
+    'Sony WH-1000XM5 Headphones',
+    'Apple AirPods Pro (2nd Gen)',
+    'Instant Pot Duo 7-in-1',
+    'Nike Air Zoom Pegasus 40',
+    'Kindle Paperwhite (16 GB)',
+    'LEGO Technic Lamborghini',
+    'KitchenAid Artisan Stand Mixer',
+    'Bowflex SelectTech 552 Dumbbells (Pair)'
+);

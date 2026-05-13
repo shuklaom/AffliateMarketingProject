@@ -1,12 +1,27 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useProducts } from '../hooks/useProducts';
+import { fetchFeaturedProducts } from '../services/productService';
+import { useSeo } from '../hooks/useSeo';
 import ProductCard from '../components/ui/ProductCard';
 import Spinner from '../components/ui/Spinner';
 import styles from './HomePage.module.css';
 
 export default function HomePage() {
-  const { products, loading, error } = useProducts({ initialCategory: 'All' });
-  const featured = products.slice(0, 8);
+  useSeo('Home', 'Discover the best affiliate deals on electronics, kitchen, fashion, books, toys and sports gear.');
+
+  const [featured, setFeatured] = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetchFeaturedProducts({ limit: 8 })
+      .then((data) => { if (!cancelled) setFeatured(Array.isArray(data) ? data : []); })
+      .catch((err) => { if (!cancelled) setError(err.message || 'Failed to load deals.'); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <div className={styles.page}>

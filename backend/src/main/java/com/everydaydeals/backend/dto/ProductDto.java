@@ -23,6 +23,8 @@ public class ProductDto {
     private final String     retailer;
     private final String     category;
     private final Instant    createdAt;
+    private final boolean    featured;
+    private final int        clickCount;
 
     public ProductDto(Product p) {
         this.id            = p.getId();
@@ -35,5 +37,7 @@ public class ProductDto {
         this.retailer      = p.getRetailer();
         this.category      = p.getCategory();
         this.createdAt     = p.getCreatedAt();
+        this.featured      = p.isFeatured();
+        this.clickCount    = p.getClickCount();
     }
 }

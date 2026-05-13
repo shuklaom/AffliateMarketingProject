@@ -4,8 +4,10 @@ export const API_BASE_URL =
 export const API_ENDPOINTS = {
   PRODUCTS:              `${API_BASE_URL}/products`,
   PRODUCT_BY_ID:         (id)       => `${API_BASE_URL}/products/${id}`,
+  PRODUCTS_FEATURED:     `${API_BASE_URL}/products/featured`,
   PRODUCTS_BY_CATEGORY:  (category) => `${API_BASE_URL}/products/category/${category}`,
   PRODUCTS_SEARCH:       (query)    => `${API_BASE_URL}/products/search?q=${encodeURIComponent(query)}`,
+  PRODUCT_CLICK:         (id)       => `${API_BASE_URL}/products/${id}/click`,
 };
 
 export const API_CONFIG = {
