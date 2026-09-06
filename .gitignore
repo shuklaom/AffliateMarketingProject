@@ -1,0 +1,27 @@
+# Local environment configuration and secrets
+.env
+.env.*
+!.env.example
+.envrc
+
+# Local Spring profiles
+application-local.properties
+application-*.local.properties
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Common credential exports
+credentials.json
+credentials.yaml
+credentials.yml
+*credentials*.json
+*credentials*.yaml
+*credentials*.yml
+*secrets*.json
+*secrets*.yaml
+*secrets*.yml

@@ -7,8 +7,13 @@ echo   Everyday Deals - Starting All Servers
 echo ================================================
 echo.
 
-REM Set database password - change this if your password differs
-set DB_PASSWORD=
+REM Database credentials must be supplied through the current environment.
+if not defined DB_PASSWORD (
+    echo ERROR: DB_PASSWORD is not set.
+    echo Set it before starting, for example: set "DB_PASSWORD=your_password"
+    pause
+    exit /b 1
+)
 
 REM ── Step 1: Ensure MySQL is running ──────────────────────────────────
 echo [0/2] Starting MySQL service (MySQL80)...
